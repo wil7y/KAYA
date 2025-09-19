@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arduino Learn — Plateforme ludique</title>
+  <link rel="icon" href="favicon.png" />
+  <style>
+    /* =========================
+       THEME & RESET
+    ========================= */
+    :root {
+      --blue-900: #0d1b2a;
+      --blue-800: #102a43;
+      --blue-700: #0b5ed7; /* accent */
+      --blue-600: #0ea5ff; /* neon */
+      --blue-500: #39b6ff; /* cyanish */
+      --blue-100: #eef7ff; /* soft bg */
+      --white: #ffffff;
+      --text: #1b2a41;
+      --muted: #6b7a90;
+
+      --shadow-1: 0 10px 30px rgba(13, 27, 42, 0.12);
+      --shadow-2: 0 20px 50px rgba(13, 27, 42, 0.18);
+
+      --radius-lg: 16px;
+      --radius-sm: 10px;
+
+      --container: min(1200px, 92vw);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--text); background: linear-gradient(180deg, var(--blue-100), #fafdff 50%, var(--blue-100)); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    /* Subtle animated background blobs (futuristic) */
+    body::before, body::after {
+      content: "";
+      position: fixed; inset: -20vmax auto auto -20vmax;
+      width: 60vmax; height: 60vmax; border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(14,165,255,.18), transparent 70%);
+      filter: blur(30px);
+      animation: floatBlob 18s ease-in-out infinite;
+      z-index: -1;
+    }
+    body::after { inset: auto -20vmax -20vmax auto; animation-duration: 22s; }
+    @keyframes floatBlob { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(6%, -4%) scale(1.08); } }
+
+    /* =========================
+       HEADER
+    ========================= */
+    .app-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: saturate(1.2) blur(8px);
+      border-bottom: 1px solid #e6f2ff;
+    }
+    .header-inner {
+      width: var(--container); margin: 0 auto; display: flex; align-items: center; gap: 16px; padding: 12px 0;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: 0.2px; font-size: clamp(18px, 2vw, 22px); color: var(--blue-800); }
+    .logo-badge { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: linear-gradient(135deg, var(--blue-700), var(--blue-600)); color: white; box-shadow: var(--shadow-1); }
+
+    .nav {
+      margin-left: auto; display: flex; align-items: center; gap: clamp(12px, 2vw, 24px);
+    }
+    .nav a.forum-link {
+      padding: 8px 14px; border-radius: 999px; background: linear-gradient(135deg, var(--blue-600), var(--blue-500)); color: white; font-weight: 600;
+      box-shadow: 0 6px 16px rgba(14,165,255,0.35); transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .nav a.forum-link:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(14,165,255,0.4); }
+
+    .user-chip { display: flex; align-items: center; gap: 10px; background: white; padding: 6px 12px; border-radius: 999px; border: 1px solid #e9f3ff; box-shadow: var(--shadow-1); }
+    .avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #e6f2ff; }
+    .chip-name { font-weight: 700; color: var(--blue-800); }
+    .chip-score { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 999px; background: linear-gradient(135deg, #e8f6ff, #ffffff); border: 1px solid #e6f2ff; font-weight: 700; color: #0b5ed7; }
+
+    /* Burger (mobile) */
+    .burger { display: none; font-size: 26px; line-height: 1; padding: 6px 10px; border-radius: 10px; border: 1px solid #e6f2ff; background: white; }
+
+    /* =========================
+       LAYOUT
+    ========================= */
+    .layout { width: var(--container); margin: 24px auto; display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
+
+    /* Sidebar (Classement) */
+    .sidebar { position: sticky; top: 76px; align-self: start; background: rgba(255,255,255,0.9); backdrop-filter: blur(6px); border: 1px solid #e6f2ff; border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-1); }
+    .sidebar h3 { margin: 0 0 10px; color: var(--blue-800); font-size: 18px; display: flex; align-items: center; gap: 8px; }
+
+    .rank-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+    .rank-item { display: grid; grid-template-columns: 30px 1fr auto; gap: 10px; align-items: center; background: white; border: 1px solid #e6f2ff; border-radius: 12px; padding: 10px; box-shadow: 0 6px 14px rgba(14, 165, 255, 0.08); transition: transform .2s ease, box-shadow .2s ease; }
+    .rank-item:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(14, 165, 255, 0.15); }
+    .rank-medal { font-weight: 800; color: var(--blue-700); }
+    .rank-name { font-weight: 700; color: var(--blue-800); }
+    .rank-score { font-weight: 800; color: #0b5ed7; }
+    .rank-bar { grid-column: 1 / -1; height: 8px; background: #eff7ff; border-radius: 999px; overflow: hidden; }
+    .rank-bar > span { display: block; height: 100%; width: var(--p, 50%); background: linear-gradient(90deg, var(--blue-700), var(--blue-500)); transition: width .6s ease; }
+    .me { outline: 2px dashed rgba(14,165,255,0.5); outline-offset: 3px; }
+
+    /* Content */
+    .content { display: grid; gap: 24px; }
+
+    /* Hero / Progress */
+    .hero {
+      display: grid; gap: 16px; align-items: center; grid-template-columns: 1fr auto; padding: 20px; border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #ffffff 0%, #f5fbff 100%); border: 1px solid #e6f2ff; box-shadow: var(--shadow-2);
+    }
+    .hero-title { margin: 0; font-size: clamp(22px, 3vw, 28px); color: var(--blue-800); }
+    .hero-sub { margin: 0; color: var(--muted); }
+
+    .progress-wrap { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .progress { position: relative; height: 14px; background: #ebf6ff; border-radius: 999px; overflow: hidden; border: 1px solid #e6f2ff; }
+    .progress > span { position: absolute; inset: 0 auto 0 0; width: var(--progress, 62%); background: linear-gradient(90deg, var(--blue-700), var(--blue-600)); box-shadow: inset 0 0 10px rgba(255,255,255,.5);
+      animation: shimmer 2.2s linear infinite; background-size: 200% 100%; }
+    @keyframes shimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+
+    .level-badge { justify-self: end; width: 76px; height: 76px; border-radius: 16px; display: grid; place-items: center; font-weight: 900; color: white; background:
+      conic-gradient(from -90deg, var(--blue-600) var(--progressDeg, 220deg), #e9f3ff 0);
+      position: relative; box-shadow: var(--shadow-2);
+    }
+    .level-badge::after { content: attr(data-label); position: absolute; inset: 6px; background: white; color: var(--blue-800); display: grid; place-items: center; border-radius: 12px; font-size: 18px; font-weight: 900; }
+
+    /* Lessons */
+    .lessons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .card {
+      position: relative; background: white; border: 1px solid #e6f2ff; border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow-1);
+      transition: transform .2s ease, box-shadow .2s ease; transform-style: preserve-3d;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 24px 40px rgba(13,27,42,0.12); }
+    .card h4 { margin: 6px 0 8px; color: var(--blue-800); font-size: 18px; }
+    .card p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+    .badge-xp { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #e6f7ff; color: #0b5ed7; font-weight: 800; font-size: 12px; }
+    .cta { margin-top: 10px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 12px; border: 1px solid #e6f2ff; background: linear-gradient(135deg, var(--blue-600), var(--blue-500)); color: white; font-weight: 700; box-shadow: 0 10px 22px rgba(14,165,255,0.35); cursor: pointer; position: relative; overflow: hidden; }
+    .cta span { pointer-events: none; }
+    .cta:active { transform: translateY(1px); }
+
+    /* Card reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(14px); }
+    .reveal.show { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s ease; }
+
+    /* =========================
+       MODAL LOGIN (Duolingo-vibes)
+    ========================= */
+    .modal { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(0,20,40,0.45); z-index: 100; visibility: hidden; opacity: 0; transition: .25s ease; }
+    .modal.open { visibility: visible; opacity: 1; }
+    .modal-card { width: min(420px, 92vw); background: white; border-radius: 18px; padding: 22px; box-shadow: var(--shadow-2); border: 1px solid #e6f2ff; position: relative; }
+    .modal-title { margin: 0 0 10px; font-size: 22px; color: var(--blue-800); }
+    .modal-sub { margin: 0 0 16px; color: var(--muted); }
+    .x { position: absolute; top: 10px; right: 10px; border: 0; background: transparent; font-size: 24px; cursor: pointer; color: var(--muted); }
+
+    .field { display: grid; gap: 8px; margin: 12px 0 14px; }
+    .field label { font-weight: 700; color: var(--blue-800); font-size: 14px; }
+    .field input { padding: 12px 14px; border-radius: 12px; border: 2px solid #d8ecff; background: #fbfeff; font-size: 15px; transition: border-color .25s; }
+    .field input:focus { outline: none; border-color: var(--blue-600); box-shadow: 0 0 0 4px rgba(14,165,255,0.15); }
+
+    .btn-primary { width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--blue-700), var(--blue-500)); color: white; font-weight: 800; cursor: pointer; box-shadow: 0 14px 28px rgba(14,165,255,0.35); }
+
+    /* =========================
+       OFFCANVAS (sidebar mobile)
+    ========================= */
+    .offcanvas { position: fixed; top: 0; right: 0; width: min(86vw, 360px); height: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-left: 1px solid #e6f2ff; box-shadow: -10px 0 30px rgba(13,27,42,0.15); transform: translateX(100%); transition: transform .3s ease; z-index: 80; padding: 16px; }
+    .offcanvas.open { transform: translateX(0); }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+    @media (max-width: 1024px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .burger { display: inline-block; }
+      .hero { grid-template-columns: 1fr; }
+      .level-badge { justify-self: start; }
+      .lessons { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .lessons { grid-template-columns: 1fr; }
+      .user-chip .chip-name { display: none; } /* compact */
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-badge">{ }</div>
+        Arduino Learn
+      </div>
+      <nav class="nav" aria-label="Navigation">
+        <a class="forum-link" href="#forum">Forum</a>
+        <div class="user-chip" id="userChip">
+          <img class="avatar" src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=200&auto=format&fit=crop" alt="Avatar" />
+          <span class="chip-name" id="chipName">Invité</span>
+          <span class="chip-score" id="chipScore">🏆 0</span>
+        </div>
+        <button class="burger" id="openAside" aria-label="Ouvrir classement">☰</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- OFFCANVAS (Classement mobile) -->
+  <aside class="offcanvas" id="offcanvas">
+    <button class="x" id="closeAside" aria-label="Fermer">×</button>
+    <h3>🏆 Classement</h3>
+    <ul class="rank-list" id="rankListMobile"></ul>
+  </aside>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+    <!-- Sidebar desktop -->
+    <aside class="sidebar" aria-label="Classement">
+      <h3>🏆 Classement</h3>
+      <ul class="rank-list" id="rankList"></ul>
+    </aside>
+
+    <section class="content">
+      <!-- HERO / PROGRESS -->
+      <div class="hero">
+        <div class="progress-wrap">
+          <h2 class="hero-title">Bienvenue, <span id="heroName">Invité</span> 👋</h2>
+          <p class="hero-sub">Poursuivez votre aventure Arduino ! Atteignez le niveau supérieur en terminant des leçons et gagnez des points d'expérience.</p>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span id="progressFill"></span>
+          </div>
+        </div>
+        <div class="level-badge" id="levelBadge" data-label="Lv.1" style="--progressDeg: 120deg"></div>
+      </div>
+
+      <!-- LESSONS GRID -->
+      <section class="lessons" aria-label="Leçons">
+        <!-- Cards will be injected by JS for maintainability -->
+      </section>
+    </section>
+  </div>
+
+  <!-- MODAL LOGIN (opens on load) -->
+  <div class="modal" id="loginModal" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
+    <div class="modal-card">
+      <button class="x" id="closeLogin" aria-label="Fermer">×</button>
+      <h3 class="modal-title" id="loginTitle">Connexion</h3>
+      <p class="modal-sub">Créez un pseudo et commencez à jouer.</p>
+      <div class="field">
+        <label for="username">Nom d'utilisateur</label>
+        <input id="username" type="text" placeholder="Ex: Maker42" />
+      </div>
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" placeholder="••••••••" />
+      </div>
+      <button class="btn-primary" id="loginBtn">Entrer dans l'aventure</button>
+    </div>
+  </div>
+
+  <script>
+    // =========================
+    // DATA (mock) — prêt pour backend plus tard
+    // =========================
+    const user = { name: "Invité", score: 0, progress: 28, level: 1 };
+    const leaderboard = [
+      { name: "Alice", score: 980, progress: 92 },
+      { name: "Bob", score: 860, progress: 81 },
+      { name: "Charlie", score: 720, progress: 64 },
+      { name: "Diana", score: 610, progress: 54 },
+      { name: "Ethan", score: 540, progress: 48 },
+    ];
+
+    const lessons = [
+      { title: "Introduction à Arduino", xp: 20, desc: "Découverte de la carte, IDE et premiers croquis.", icon: "⚡" },
+      { title: "LED & Boutons", xp: 30, desc: "Sorties, entrées numériques et anti-rebond.", icon: "💡" },
+      { title: "PWM & Intensité", xp: 40, desc: "Fonctions analogWrite, modulation de largeur d'impulsion.", icon: "🎚️" },
+      { title: "Capteurs analogiques", xp: 35, desc: "Lecture analogRead, LM35, LDR et mappage.", icon: "🌡️" },
+      { title: "Serial & Debug", xp: 25, desc: "Monitor série, print, debug propre et efficace.", icon: "🧪" },
+      { title: "Moteurs & Servos", xp: 50, desc: "Pilotage de servos et moteurs DC en toute sécurité.", icon: "⚙️" },
+    ];
+
+    // =========================
+    // UTILITIES
+    // =========================
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
+
+    // =========================
+    // INIT UI
+    // =========================
+    function renderLeaderboard(listEl) {
+      listEl.innerHTML = leaderboard.map((p, i) => `
+        <li class="rank-item ${p.name === user.name ? 'me' : ''}" style="--p:${p.progress}%">
+          <div class="rank-medal">${i+1}</div>
+          <div class="rank-name">${p.name}</div>
+          <div class="rank-score">${p.score} pts</div>
+          <div class="rank-bar"><span style="width:${p.progress}%"></span></div>
+        </li>`).join('');
+    }
+
+    function renderLessons() {
+      const grid = $('.lessons');
+      grid.innerHTML = lessons.map(l => `
+        <article class="card reveal">
+          <div class="badge-xp">+${l.xp} XP</div>
+          <h4>${l.icon} ${l.title}</h4>
+          <p>${l.desc}</p>
+          <button class="cta" data-xp="${l.xp}">
+            <span>Accéder</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </article>
+      `).join('');
+    }
+
+    function updateUserUI() {
+      $('#chipName').textContent = user.name;
+      $('#chipScore').textContent = `🏆 ${user.score}`;
+      $('#heroName').textContent = user.name;
+      $('#progressFill').style.setProperty('--progress', user.progress + '%');
+      $('#levelBadge').style.setProperty('--progressDeg', (3.6 * user.progress) + 'deg');
+      $('#levelBadge').setAttribute('data-label', 'Lv.' + user.level);
+      const pb = $('.progress');
+      pb.setAttribute('aria-valuenow', user.progress);
+    }
+
+    // =========================
+    // REVEAL ON SCROLL + TILT
+    // =========================
+    function setupReveal() {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+      }, { threshold: 0.12 });
+      $$('.reveal').forEach(el => io.observe(el));
+    }
+
+    function setupTilt() {
+      $$('.card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const r = card.getBoundingClientRect();
+          const x = e.clientX - r.left; const y = e.clientY - r.top;
+          const rx = ((y / r.height) - 0.5) * -6; // tilt X
+          const ry = ((x / r.width) - 0.5) * 6;  // tilt Y
+          card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
+        });
+        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      });
+    }
+
+    // =========================
+    // CTA ripple / score boost (fun)
+    // =========================
+    function setupCTA() {
+      $$('.cta').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          // ripple
+          const r = document.createElement('span');
+          r.style.position = 'absolute'; r.style.inset = '0'; r.style.background = 'radial-gradient(120px circle at ' + (e.offsetX) + 'px ' + (e.offsetY) + 'px, rgba(255,255,255,.6), transparent 40%)';
+          r.style.pointerEvents = 'none'; r.style.animation = 'fade .6s ease';
+          btn.appendChild(r);
+          setTimeout(() => r.remove(), 600);
+
+          // playful score increment
+          const gain = Number(btn.dataset.xp) || 0;
+          user.score += gain; user.progress = Math.min(100, user.progress + Math.ceil(gain/2));
+          if (user.progress >= 100) { user.level++; user.progress = 0; }
+          updateUserUI();
+        });
+      });
+    }
+
+    // Keyframes for ripple fade
+    const style = document.createElement('style');
+    style.textContent = `@keyframes fade { from { opacity: 1 } to { opacity: 0 } }`;
+    document.head.appendChild(style);
+
+    // =========================
+    // MODAL LOGIN
+    // =========================
+    const loginModal = $('#loginModal');
+    const loginBtn = $('#loginBtn');
+    const closeLogin = $('#closeLogin');
+
+    function openLogin() { loginModal.classList.add('open'); }
+    function closeLoginFn() { loginModal.classList.remove('open'); }
+
+    window.addEventListener('load', openLogin);
+    closeLogin.addEventListener('click', closeLoginFn);
+    loginBtn.addEventListener('click', () => {
+      const name = ($('#username').value || 'Maker');
+      user.name = name; user.score = 120; user.level = 3; user.progress = 62;
+      updateUserUI();
+      // Put user in leaderboard if not present
+      if (!leaderboard.find(p => p.name === user.name)) leaderboard.splice(2, 0, { name: user.name, score: user.score, progress: user.progress });
+      renderLeaderboard($('#rankList'));
+      renderLeaderboard($('#rankListMobile'));
+      closeLoginFn();
+    });
+
+    // =========================
+    // OFFCANVAS (mobile)
+    // =========================
+    const offcanvas = $('#offcanvas');
+    $('#openAside').addEventListener('click', () => offcanvas.classList.add('open'));
+    $('#closeAside').addEventListener('click', () => offcanvas.classList.remove('open'));
+    offcanvas.addEventListener('click', (e) => { if (e.target === offcanvas) offcanvas.classList.remove('open'); });
+
+    // =========================
+    // BOOTSTRAP
+    // =========================
+    renderLeaderboard($('#rankList'));
+    renderLeaderboard($('#rankListMobile'));
+    renderLessons();
+    updateUserUI();
+    setupReveal();
+    setupTilt();
+    setupCTA();
+  </script>
+</body>
+</html>

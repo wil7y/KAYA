@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Artistry Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="contact.css">
+</head>
+<body>
+  <header>
+    <div class="logo">Artistry</div>
+  </header>
+
+  <main>
+    <section class="contact-hero">
+      <h1>Contactez-nous</h1>
+      <p>Envoyez-nous un message ou une demande, nous vous répondrons rapidement.</p>
+    </section>
+
+    <section class="contact-form-section">
+      <div class="contact-card">
+        <form action="#" method="POST" class="contact-form" id="contact-form">
+          <label for="name">Nom</label>
+          <input type="text" id="name" name="name" placeholder="Votre nom">
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Votre email">
+
+          <label for="subject">Objet</label>
+          <input type="text" id="subject" name="subject" placeholder="Objet de votre message">
+
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="Votre message"></textarea>
+
+          <button type="submit" class="btn-submit">Envoyer</button>
+        </form>
+        <div class="contact-info">
+          <h2>Informations</h2>
+          <p>Email : contact@artistry.com</p>
+          <p>Téléphone : +237 699 123 456</p>
+          <p>Adresse : Douala, Cameroun</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module">
+// Import Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+// Config Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBZEdkns9h6f7cDTo5E_7xdsGKGkoFmN9w",
+  authDomain: "ecommerce-5ced7.firebaseapp.com",
+  projectId: "ecommerce-5ced7",
+  storageBucket: "ecommerce-5ced7.appspot.com",
+  messagingSenderId: "527505769374",
+  appId: "1:527505769374:web:274a9c3184a313d8778c8f",
+  measurementId: "G-WKNBS4S6LK"
+};
+
+// Initialisation de Firebase
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const form = document.getElementById('contact-form');
+
+// Vérifie que le formulaire existe
+if (!form) throw new Error("Formulaire contact introuvable !");
+
+let userUid = null;
+
+// Vérifie l’état de l’utilisateur
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        userUid = user.uid;
+        form.querySelector("button[type='submit']").disabled = false;
+    } else {
+        userUid = null;
+        form.querySelector("button[type='submit']").disabled = true;
+        alert("Connectez-vous pour envoyer un message.");
+    }
+});
+
+// Soumission du formulaire
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!userUid) return alert("Vous devez être connecté pour envoyer un message.");
+
+    const data = {
+        name: form.name.value,
+        email: form.email.value,
+        subject: form.subject.value,
+        message: form.message.value,
+        uid: userUid,
+        timestamp: new Date()
+    };
+
+    try {
+        await addDoc(collection(db, "contacts"), data);
+        alert("Message envoyé !");
+        form.reset();
+    } catch (err) {
+        console.error(err);
+        alert("Erreur lors de l'envoi.");
+    }
+});
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>E-commerce</title>
+        <link rel="stylesheet" href="styles.css"/>
+        
+        <link rel="icon" href="favicon.png" type="image/png">
+    </head>
+
+    <body>
+        <header>
+            <div class="header-container">
+                <div class="logo">KAYA</div>
+
+                <div class="search-bar">
+                    <input type="text" placeholder="Rechercher des produits...">
+                    <button>Chercher</button>
+                </div>
+
+                <div class="actions">
+                    <a href="#" id="openModal">Connexion</a>
+                    
+                    <a href="panier.html">Panier</a>
+                    <a href="profil.html">Profil</a>
+                </div>
+            </div>
+
+            <div class="nav-bar">
+                <div class="nav-container">
+                    <div class="categories">Trouvez votre bonheur et apprenez avec nous</div>
+
+                    <nav class="menu">
+                        <a href="#phare">A la Une    </a>
+                        <a href="#nouveauté">Nouveautés    </a>
+                        <a href="mois.html">Articles du mois    </a>
+                        
+                        
+                    </nav>
+
+                    <div class="nav-right">Service client 24/7</div>
+                </div>
+            </div>
+        </header>
+        <div class="modal" id="authModal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+
+                <div class="tabs">
+                    <button class="tab-active" id="loginTab">Connexion</button>
+                    <button class="tab" id="registerTab">Inscription</button>
+                </div>
+
+                <form class="form active" id="loginForm">
+                    <label for="loginUser">Email</label>
+                    <input type="email" id="loginUser" placeholder="Entrez votre Email">
+                    <label for="loginPass">Mot de passe</label>
+                    <input type="password" id="loginPass" placeholder="Entrez votre mot de passe">
+                    <button type="submit" class="btn">Se connecter</button>
+                </form>
+
+                <form class="form" id="registerForm">
+                    <label for="regName">Créer un Pseudo</label>
+                    <input type="text" id="regName" placeholder="Entrez votre Pseudo">
+
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" placeholder="Entrez votre email">
+
+                    <label for="regPass">Mot de passe</label>
+                    <input type="password" id="regPass" placeholder="Créer un mot de passe">
+
+                    <label for="regConfirm">Confirmer mot de passe</label>
+                    <input type="password" id="regConfirm" placeholder="Confirmez le mot de passe">
+
+                    <button type="submit" class="btn">S'inscrire</button>
+                </form>
+            </div>
+        </div>
+
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-image">
+                    <img src="arduino.jpg" alt="Promotion produit">
+                </div>
+                <div class="hero-text">
+                    <h1>Découvrez nos meilleures offres</h1>
+                    <p>Produits de qualité, livraison rapide et promotions exclusives !</p>
+                    <!--<button class="cta-btn">Acheter maintenant</button>-->
+                    
+                </div>
+            
+                
+            </div>
+                <!-- Banderole Hero -->
+            
+
+
+
+                
+            </div>
+        </section>
+
+      
+       <!-- <div class="ad-banner">
+                    <a href="#">
+                        <img src="arduino.jpg" alt="promo spéciale">
+                    </a>
+                    
+                </div>-->
+
+        <section class="products">
+            <h2>Nos produits phares</h2>
+            <div class="products-container" id="phare">
+                <div class="product-card">
+                    <img src="arduino.jpg" alt="Produit 1">
+                    <h3>Arduino Uno</h3>
+                    <p class="price"><span class="current-price">8000 FCFA</span>
+                    <span class="old-price">10500 FCFA</span></p>
+                    <button class="buy-btn">Commander</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="arduino.jpg" alt="Produit 2">
+                    <h3>Arduino Mega</h3>
+                    <p class="price"><span class="current-price">10000 FCFA</span>
+                    <span class="old-price">12500 FCFA</span></p>
+                    <button class="buy-btn">Commander</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="arduino.jpg" alt="Produit 2">
+                    <h3>Arduino NaNo</h3>
+                    <p class="price"><span class="current-price">5000 FCFA</span>
+                    <span class="old-price">6500 FCFA</span></p>
+                    <button class="buy-btn">Commander</button>
+                </div>
+
+                
+
+                <div class="product-card">
+                    <img src="arduino.jpg" alt="Produit 1">
+                    <h3>Arduino Uno</h3>
+                    <p class="price"><span class="current-price">8000 FCFA</span>
+                    <span class="old-price">10500 FCFA</span></p>
+                    <button class="buy-btn">Commander</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="arduino.jpg" alt="Produit 2">
+                    <h3>Arduino Mega</h3>
+                    <p class="price"><span class="current-price">10000 FCFA</span>
+                    <span class="old-price">12500 FCFA</span></p>
+                    <button class="buy-btn">Commander</button>
+                </div>
+
+                <div class="product-card">
+                    <img src="arduino.jpg" alt="Produit 2">
+                    <h3>Arduino NaNo</h3>
+                    <p class="price"><span class="current-price">5000 FCFA</span>
+                    <span class="old-price">6500 FCFA</span></p>
+                    <button class="buy-btn">Commander</button>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="categories-section">
+            <h2>Nos catégories</h2>
+            <div class="categories-slider">
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Electronique</span>
+                <a href="cat.html"><button>&#128064; Voir</button></a><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Maison</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Jouets</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Beauté</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Electronique</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Maison</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Jouets</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Beauté</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Electronique</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Maison</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Jouets</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            <div class="category-card">
+                <img src="arduino.jpg" alt="Categorie 1"><span>Beauté</span>
+                <button>&#128064; Voir</button><br>
+            </div>
+            </div>
+        </section>
+
+        <section class="popular">
+            <h2>Produits Poulaires</h2>
+            <div class="product-grid">
+
+                <div class="product-card" id="nouveauté">
+                    <span class="badge">&#128293; Tendance</span>
+                    <img src="arduino.jpg" alt="produit 1">
+                    <h3>Casque bluetooth</h3>
+                    <p class="price"><span class="old-price">15000 FCFA</span> 13800FCFA</p>
+                    <button>&#128722; Commander</button>
+                </div>
+
+
+                <div class="product-card">
+                    <span class="badge">&#128142; Premium</span>
+                    <img src="arduino.jpg" alt="produit 1">
+                    <h3>Casque bluetooth</h3>
+                    <p class="price"><span class="old-price">15000 FCFA</span> 13800FCFA</p>
+                    <button>&#128722; Commander</button>
+                </div>
+
+                <div class="product-card">
+                    <span class="badge">&#11088; Best Seller</span>
+                    <img src="arduino.jpg" alt="produit 1">
+                    <h3>Casque bluetooth</h3>
+                    <p class="price"><span class="old-price">15000 FCFA</span> 13800FCFA</p>
+                    <button>&#128722; Commander</button>
+                </div>
+
+                <div class="product-card">
+                    <span class="badge">&#9889; Promo</span>
+                    <img src="arduino.jpg" alt="produit 1">
+                    <h3>Casque bluetooth</h3>
+                    <p class="price"><span class="old-price">15000 FCFA</span> 13800FCFA</p>
+                    <button>&#128722; Commander</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <h2> Avis de nos clients</h2>
+            <div class="testimonial-slider">
+                <div class="testimonial">
+                    <span class="profil">&#128578;</span>
+                    <p>Produit génial ! Livraison</p>
+                </div>
+
+                <div class="testimonial">
+                    <span class="profil">&#128526;</span>
+                    <p>Service client très réactif</p>
+                </div>
+
+                <div class="testimonial">
+                    <span class="profil">&#128512;</span>
+                    <p>Je recommande à 100%</p>
+                </div>
+
+                <div class="testimonial">
+                    <span class="profil">&#128521;</span>
+                    <p>Excellente qualité et design moderne</p>
+                </div>
+            </div>
+
+            <form class="testimonial-form">
+                <input type="text" placeholder="Votre avis..." required>
+                <button type="submit">Envoyer</button>
+            </form>
+        </section>
+
+        <section class="newsletter">
+            <div class="nawsletter-container">
+                <div class="newsletter-content">
+                    <h2>Abonnez vous à notre newsletter</h2>
+                    <p>Recevez les dernières offres et nouveautés directement dasn votre boite mail.</p>
+                    <!-- Formulaire minimaliste -->
+                    <form id="newsletter-form" action="https://gmail.us1.list-manage.com/subscribe/post?u=1e6ff54c54fd410e5990af5d1&id=1b22bde4f1" method="post" target="_blank">
+                        <input type="email" name="EMAIL" placeholder="Votre email" required>
+                        <button type="submit">S'inscrire</button>
+                    </form>
+
+                    <p id="newsletterMessage"></p>
+                </div><br>
+                <div class="newsletter-gif">
+                    <img src="o.gif" alt="animation">
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="faq">
+            <h2> Questions fréquentes</h2>
+            <div class="faq-item">
+                <button class="faq-question">Quels sont vos délais de livraison ?</button>
+                <div class="faq-answer">
+                    <p>Nos délais varient entre 3 et 5 jours selon votre localisation.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">Quels sont vos délais de livraison ?</button>
+                <div class="faq-answer">
+                    <p>Nos délais varient entre 3 et 5 jours selon votre localisation.</p>
+                </div>
+            </div>
+        </section>
+
+        
+    </body>
+    <footer>
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">Accueil</a>
+                    <a href="#phare">Produits</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="#">A propos</a>
+                </div>
+                <div class="footer-socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Whatsapp</a>
+                    <a href="#">X</a>
+                </div>
+                <p class="footer-copy">2025 Monsite. Tous droits réservés.</p>
+            </div>
+        </footer>
+    
+    <script src="script.js" type="module"></script>
+    <script src="panier.js" type="module"></script>
+    <script type="module">
+    // JS
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+const auth = getAuth();
+
+// Formulaire newsletter
+const form = document.getElementById('newsletter-form');
+const message = document.getElementById('newsletterMessage');
+
+// Au départ, le message est caché
+message.style.display = 'none';
+
+function submitEmailToMailchimp(email) {
+    if (!email) return;
+
+    // Crée un iframe temporaire pour soumettre l'email à Mailchimp
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.name = 'hidden_iframe';
+    document.body.appendChild(iframe);
+
+    form.target = 'hidden_iframe';
+    form.querySelector('input[name="EMAIL"]').value = email;
+    form.submit();
+
+    // Affiche un message de confirmation
+    message.textContent = `Merci ${email} ! Vous êtes maintenant abonné à notre newsletter.`;
+    message.style.display = 'block';
+
+    // Reset formulaire et supprime l'iframe
+    form.reset();
+    setTimeout(() => iframe.remove(), 2000);
+}
+
+// Soumission manuelle du formulaire
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = form.querySelector('input[name="EMAIL"]').value.trim();
+    submitEmailToMailchimp(email);
+});
+
+// Soumission automatique pour l'utilisateur connecté
+onAuthStateChanged(auth, (user) => {
+    if (user && user.email) {
+        submitEmailToMailchimp(user.email);
+    }
+});
+
+
+</script>
+</html>

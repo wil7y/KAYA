@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- Popup login si non connecté -->
+  <div id="login-popup" class="login-popup">
+    <div class="login-content">
+      <span id="close-popup">&times;</span>
+      <h2>Connexion Administrateur</h2>
+      <form id="admin-login-form">
+        <input type="email" id="admin-email" placeholder="Email" required>
+        <input type="password" id="admin-password" placeholder="Mot de passe" required>
+        <button type="submit">Connexion</button>
+      </form>
+    </div>
+  </div>
+
+  <header>
+    <h1>Dashboard Admin</h1>
+    <button id="logout-btn">Déconnexion</button>
+  </header>
+
+  <nav>
+    <button data-section="orders">Commandes</button>
+    <button data-section="users">Gestion utilisateurs</button>
+    <button data-section="contacts">Gestion produits</button>
+  </nav>
+
+  <main>
+    <section id="admin-content">
+      <!-- Contenu dynamique chargé par JS -->
+      <p>Sélectionnez une section pour voir les données.</p>
+    </section>
+  </main>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

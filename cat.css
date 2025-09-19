@@ -1,0 +1,233 @@
+/* Reset et styles globaux */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #fefefe;
+    color: #333;
+    font-size: 1rem;
+}
+
+/* Header */
+header {
+    background: #fff;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #FF6600;
+}
+
+.search-bar {
+    display: flex;
+    flex: 1;
+    max-width: 400px;
+    margin: 0 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    transition: border-color 0.3s;
+}
+
+.search-bar input:focus {
+    border-color: #FF6600;
+    outline: none;
+}
+
+.search-bar button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background: #FF6600;
+    color: #fff;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.search-bar button:hover {
+    background: #e65500;
+    transform: scale(1.05);
+}
+
+.actions a {
+    margin-left: 1rem;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.actions a:hover {
+    color: #FF6600;
+}
+
+/* Section produits */
+.category-products {
+    padding: 1rem;
+}
+
+.category-products h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #FF6600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Grille produits */
+.products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 0.5rem;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.product-card img:hover {
+    transform: scale(1.05);
+}
+
+.product-card h3 {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.product-card p.price {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #FF6600;
+}
+
+.product-card p.price .old-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.9rem;
+    margin-left: 0.3rem;
+}
+
+.product-card button.buy-btn {
+    padding: 0.5rem;
+    font-size: 1rem;
+    background: #FF6600;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: auto;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.product-card button.buy-btn:hover {
+    background: #e65500;
+    transform: scale(1.05);
+}
+
+/* Responsive mobile */
+@media (max-width: 600px) {
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .search-bar {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .products-container {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.5rem;
+    }
+    .product-card h3 {
+        font-size: 1rem;
+    }
+    .product-card p.price, .product-card button.buy-btn {
+        font-size: 0.9rem;
+    }
+}
+
+
+.popup-overlay {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+}
+
+.popup-contact {
+    background:#fff;
+    padding:2rem;
+    border-radius:12px;
+    width:90%;
+    max-width:400px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.3);
+    font-size:0.9rem;
+}
+
+.popup-actions {
+    display:flex;
+    justify-content:space-around;
+    margin-top:1rem;
+}
+
+.popup-actions button {
+    padding:0.5rem 1rem;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+#continueBtn { background:#ccc; color:#000; }
+#goCartBtn { background:#ff6f61; color:#fff; }
+#goCartBtn:hover { background:#e65a50; }

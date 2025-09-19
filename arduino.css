@@ -1,0 +1,203 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #e0f2ff;
+    color: #333;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px ;
+    border-radius: 15px;
+    text-align: center;
+    width: 300px;
+    animation: popIn 0.5s ease-out;
+}
+
+.modal-content input {
+    display: #00c0ff;
+    border: none;
+    color: rgb(4, 31, 73);
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.modal-content button {
+    background: #00c0ff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+}
+
+.modal-content button:hover {
+    transform: scale(1.1);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0;}
+    100% { transform: scale(1); opacity: 1;}
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #00c0ff;
+    color: white;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 500;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+header nav .user-info {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#burger {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+main {
+    display: flex;
+    margin: 20px;
+    gap: 20px;
+}
+
+.sidebar {
+    background: #a0e0ff;
+    padding: 20px;
+    border-radius: 15px;
+    width: 220px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    color: #007bbd;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 10px 0;
+    padding: 5px;
+    background: #00c0ff;
+    border-radius: 8px;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.sidebar li:hover {
+    transform: scale(1.05);
+}
+
+.lessons {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.lesson-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+    transition: transform 0.3s ease, box-shadown 0.3s ease;
+}
+
+.lesson-card button {
+    background: #00c0ff;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: transform 0.3s ease;
+}
+
+.lesson-card button:hover {
+    transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        display: none;
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        height: 100%;
+        z-index: 900;
+    }
+
+    #burger {
+        display: block;
+    }
+}
